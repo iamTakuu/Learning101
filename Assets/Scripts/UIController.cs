@@ -15,15 +15,17 @@ public class UIController : MonoBehaviour
         ShowOptions(false);
     }
 
-    public void MainMenu(bool active)
-    {
-        mainPanel.SetActive(active);
-        optionsPanel.SetActive(!active);
-    }
 
+    public void MainMenu(bool active) 
+    {
+            mainPanel.SetActive(active);
+            optionsPanel.SetActive(!active);
+    }
+    
     public void ShowOptions(bool active)
     {
-        optionsPanel.SetActive(active);
-        mainPanel.SetActive(!active);
+            optionsPanel.SetActive(active);
+            mainPanel.SetActive(!active);
     }
+
 }
