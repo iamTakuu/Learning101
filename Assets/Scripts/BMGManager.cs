@@ -13,6 +13,7 @@ public class BMGManager : MonoBehaviour
     [SerializeField] private List<AudioClip> _audioClips;
     
     // Queue to hold all songs as the game goes.
+    // https://www.geeksforgeeks.org/c-sharp-queue-with-examples/
     private Queue<AudioClip> _queue;
     private void Awake()
     {
