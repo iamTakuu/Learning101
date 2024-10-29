@@ -8,31 +8,59 @@ public class BMGManager : MonoBehaviour
     [SerializeField] private AudioSource _source;
     [SerializeField] private List<AudioClip> _audioClips;
     
-    // Stack to hold all songs as the game goes. This will be used to make sure that
-    // a new song is always played, as once you remove something from a stack, it's gone.
-    // https://www.geeksforgeeks.org/c-sharp-stack-with-examples/
-    private Stack<AudioClip> _stack;
+    // Queue to hold all songs as the game goes.
+    private Queue<AudioClip> _queue;
     private void Awake()
     {
-        // Initialise the Stack in memory.
-        _stack = new Stack<AudioClip>();
+        // Initialise the Queue in memory.
+        _queue = new Queue<AudioClip>();
         if (_audioClips != null)
         {
             foreach (var clip in _audioClips)
             {
-                _stack.Push(clip); // Push each clip in here.
+                _queue.Enqueue(clip); // Queue each clip in here.
             }
         }
     }
 
     private void Start()
     {
-        if (_source != null && _stack != null)
+        if (_source != null && _queue != null)
         {
-            // Add the last clip from list, then play!
-            _source.clip = _stack.Pop();
+            // Add the first clip from list, then play!
+            _source.clip = _queue.Dequeue();
             _source.Play();
+            StartCoroutine(PlayAudio());
         }
-        
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            NextTrack();
+        }
+    }
+
+    private void NextTrack()
+    {
+        if (_source && _queue != null)
+        {
+            StopAllCoroutines();
+            _queue.Enqueue(_source.clip);
+            _source.clip = _queue.Dequeue();
+            _source.Play();
+            StartCoroutine(PlayAudio());
+        }
+    }
+
+
+    private IEnumerator PlayAudio()
+    {
+        yield return new WaitForSeconds(_source.clip.length);
+        _queue.Enqueue(_source.clip);
+        _source.clip = _queue.Dequeue();
+        _source.Play();
+        StartCoroutine(PlayAudio());
     }
 }
