@@ -2309,9 +2309,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _source: {fileID: 2073751416}
   _audioClips:
-  - {fileID: 8300000, guid: 941699c563cd42c46b0a795b99da764c, type: 3}
-  - {fileID: 8300000, guid: e651d73155d5ce64fbd4bec8b74b42f4, type: 3}
-  - {fileID: 8300000, guid: f2ba222dfd6932e40932339f3fc07c6f, type: 3}
+  - {fileID: 8300000, guid: 33a7489a3d390d441bcf98564f421d94, type: 3}
+  - {fileID: 8300000, guid: bacf8408f96bf3d4f87fd35fcd4305cb, type: 3}
+  - {fileID: 8300000, guid: a902a9b9eb9ba594e9745aab44d122b3, type: 3}
 --- !u!4 &2073751418
 Transform:
   m_ObjectHideFlags: 0
