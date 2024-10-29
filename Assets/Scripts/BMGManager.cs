@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,6 +14,20 @@ public class BMGManager : MonoBehaviour
     // Queue to hold all songs as the game goes.
     // https://www.geeksforgeeks.org/c-sharp-queue-with-examples/
     private Queue<AudioClip> _queue;
+
+    private void OnEnable()
+    {
+        // Initialise the Queue in memory.
+        _queue = new Queue<AudioClip>();
+        if (_audioClips != null)
+        {
+            foreach (var clip in _audioClips)
+            {
+                _queue.Enqueue(clip); // Queue each clip in here.
+            }
+        }
+    }
+
     private void Awake()
     {
         // If there is an instance, and it's not me, delete myself.
@@ -26,56 +39,39 @@ public class BMGManager : MonoBehaviour
         { 
             Instance = this; 
         } 
-        
-        // Initialise the Queue in memory.
-        _queue = new Queue<AudioClip>();
-        if (_audioClips != null)
-        {
-            foreach (var clip in _audioClips)
-            {
-                _queue.Enqueue(clip); // Queue each clip in here.
-            }
-        }
         DontDestroyOnLoad(this);
     }
-
     private void Start()
     {
-        if (_source != null && _queue != null)
-        {
-            // Add the first clip from list, then play!
-            _source.clip = _queue.Dequeue();
-            _source.Play();
-            StartCoroutine(PlayClip());
-        }
+        PlayNextTrack();
     }
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
-            NextTrack();
+            PlayNextTrack();
         }
     }
-
-    private void NextTrack()
+    private void QueueAndPlayTrack()
     {
-        if (_source && _queue != null)
+        if (_source.clip)
         {
-            StopAllCoroutines();
             _queue.Enqueue(_source.clip);
-            _source.clip = _queue.Dequeue();
-            _source.Play();
-            StartCoroutine(PlayClip());
         }
-    }
-
-
-    private IEnumerator PlayClip()
-    {
-        yield return new WaitForSeconds(_source.clip.length);
-        _queue.Enqueue(_source.clip);
         _source.clip = _queue.Dequeue();
-        _source.Play();
-        StartCoroutine(PlayClip());
+        _source.Play(); 
     }
+    private void PlayNextTrack()
+    {
+        StopAllCoroutines();
+        QueueAndPlayTrack();
+        StartCoroutine(TrackCurrentSong());  
+    }
+    private IEnumerator TrackCurrentSong()
+    { 
+        yield return new WaitForSeconds(_source.clip.length);
+        QueueAndPlayTrack();
+        StartCoroutine(TrackCurrentSong());
+    }
+
 }
