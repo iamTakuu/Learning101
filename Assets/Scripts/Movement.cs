@@ -12,7 +12,8 @@ public class Movement : MonoBehaviour
     [SerializeField] private float jumpHeight = 1.0f;
     private float gravityValue = -9.81f;
     
-    public bool IsRunning { get; set; }
+    public bool IsRunning { get; private set; }
+    public bool IsJumping { get; private set; }
 
     //[SerializeField] private PlayerAnim _anim;
     
@@ -47,6 +48,11 @@ public class Movement : MonoBehaviour
         if (Input.GetButtonDown("Jump") && groundedPlayer)
         {
             playerVelocity.y += Mathf.Sqrt(jumpHeight * -2.0f * gravityValue);
+            IsJumping = true;
+        }
+        else
+        {
+            IsJumping = false;
         }
 
         playerVelocity.y += gravityValue * Time.deltaTime;

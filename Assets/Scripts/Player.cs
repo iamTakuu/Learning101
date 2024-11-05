@@ -24,5 +24,10 @@ public class Player : MonoBehaviour
       {
          _playerAnim.ToRun();
       }
+
+      if (_movement.IsJumping)
+      {
+         _playerAnim.ToJump();
+      }
    }
 }
